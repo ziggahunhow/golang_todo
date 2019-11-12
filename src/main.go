@@ -2,20 +2,21 @@ package main
 
 import (
 	"fmt"
-	config "todo/config"
-	"./models"
-	"./routes"
+	config "Todo/src/config"
+	models "Todo/src/models"
+	routes "Todo/src/routes"
+
 	"github.com/jinzhu/gorm"
 )
 
-var err error   
+var err error
 
-func main()  {
+func main() {
 	// Creating a connection to the database
 	config.DB, err = gorm.Open("mysql", config.DbURL(config.BuildDBConfig()))
 
 	if err != nil {
-	fmt.Println("status: ", err)
+		fmt.Println("status: ", err)
 	}
 
 	defer config.DB.Close()
@@ -23,7 +24,7 @@ func main()  {
 	// run the migrations: todo struct
 	config.DB.AutoMigrate(&models.Todo{})
 
-	//setup routes 
+	//setup routes
 	r := routes.SetupRouter()
 
 	// running

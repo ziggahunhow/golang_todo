@@ -1,7 +1,9 @@
 package controllers
 
 import (
-	"../models"
+	models "Todo/src/models"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +17,7 @@ func GetTodos(c *gin.Context) {
 	}
 }
 
-func CreateATodo(c *gin.Context)  {
+func CreateATodo(c *gin.Context) {
 	var todo models.Todo
 	c.BindJSON(&todo)
 	err := models.CreateATodo(&todo)
@@ -26,7 +28,7 @@ func CreateATodo(c *gin.Context)  {
 	}
 }
 
-func GetATodo(c *gin.Context)  {
+func GetATodo(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var todo models.Todo
 	err := models.GetATodo(&todo, id)
@@ -37,7 +39,7 @@ func GetATodo(c *gin.Context)  {
 	}
 }
 
-func UpdateATodo(c *gin.Context)  {
+func UpdateATodo(c *gin.Context) {
 	var todo models.Todo
 	id := c.Params.ByName("id")
 	err := models.GetATodo(&todo, id)
@@ -52,10 +54,10 @@ func UpdateATodo(c *gin.Context)  {
 	}
 }
 
-func DeleteATodo(c *gin.Context)  {
+func DeleteATodo(c *gin.Context) {
 	var todo models.Todo
 	id := c.Params.ByName("id")
-	err := models.DeleteATodo(&.todo, id)
+	err := models.DeleteATodo(&todo, id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {

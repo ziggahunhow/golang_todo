@@ -2,8 +2,11 @@ package config
 
 import (
 	"fmt"
-
 	"github.com/jinzhu/gorm"
+	"github.com/joho/godotenv"
+	"log"
+	"os"
+	"strconv"
 )
 
 var DB *gorm.DB
@@ -17,12 +20,21 @@ type DBConfig struct {
 }
 
 func BuildDBConfig() *DBConfig {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	host := os.Getenv("DBHost")
+	password := os.Getenv("DBPassword")
+	user := os.Getenv("DBUser")
+	port, _ := strconv.Atoi(os.Getenv("DBPort"))
+
 	dbConfig := DBConfig{
-		Host:     "0.0.0.0",
-		Port:     3306,
-		User:     "root",
+		Host:     host,
+		Port:     port,
+		User:     user,
 		DBName:   "todos",
-		Password: "mypassword",
+		Password: password,
 	}
 	return &dbConfig
 }

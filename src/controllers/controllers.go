@@ -20,6 +20,10 @@ func GetTodos(c *gin.Context) {
 func CreateATodo(c *gin.Context) {
 	var todo models.Todo
 	c.BindJSON(&todo)
+	if todo.Description == "" || todo.Title == "" {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 	err := models.CreateATodo(&todo)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)

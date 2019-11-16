@@ -2,11 +2,11 @@ package config
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
-	"github.com/joho/godotenv"
-	"log"
 	"os"
 	"strconv"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/joho/godotenv/autoload" // load env
 )
 
 var DB *gorm.DB
@@ -20,10 +20,6 @@ type DBConfig struct {
 }
 
 func BuildDBConfig() *DBConfig {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 	host := os.Getenv("DBHost")
 	password := os.Getenv("DBPassword")
 	user := os.Getenv("DBUser")

@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	lib "Todo/src/lib"
 	models "Todo/src/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,11 +22,12 @@ func GetTodos(c *gin.Context) {
 func CreateATodo(c *gin.Context) {
 	var todo models.Todo
 	c.BindJSON(&todo)
-	if todo.Description == "" || todo.Title == "" {
+	err := lib.CheckRequiredFields([]string{todo.Description, todo.Title})
+	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	err := models.CreateATodo(&todo)
+	err = models.CreateATodo(&todo)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -34,8 +37,13 @@ func CreateATodo(c *gin.Context) {
 
 func GetATodo(c *gin.Context) {
 	id := c.Params.ByName("id")
+	cid, err := strconv.Atoi(id)
+	if cid < 0 || err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 	var todo models.Todo
-	err := models.GetATodo(&todo, id)
+	err = models.GetATodo(&todo, id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
